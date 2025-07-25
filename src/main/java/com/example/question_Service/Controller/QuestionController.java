@@ -2,6 +2,8 @@ package com.example.question_Service.Controller;
 
 
 import com.example.question_Service.Model.Question;
+import com.example.question_Service.Model.QuestionWrapper;
+import com.example.question_Service.Model.Response;
 import com.example.question_Service.Service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +45,18 @@ public class QuestionController {
     @GetMapping("create")
     public ResponseEntity<List<Integer>> getQuestionsForQuiz(@RequestParam String category,@RequestParam int numQ){
         return questionService.getQuestionsForQuiz(category , numQ);
+    }
+
+
+    @PostMapping("getQuestions")
+    public ResponseEntity<List<QuestionWrapper>> getQuestionsFromId(@RequestBody List<Integer> questionIds){
+      return questionService.getQuestionsFromId(questionIds);
+    }
+
+
+    @PostMapping("getScore")
+    public ResponseEntity<Integer> getScore(@RequestBody List<Response> responses){
+        return questionService.getScore(responses);
     }
 
 }

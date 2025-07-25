@@ -3,10 +3,13 @@ package com.example.question_Service.Service;
 
 import com.example.question_Service.DAO.QuestionDao;
 import com.example.question_Service.Model.Question;
+import com.example.question_Service.Model.QuestionWrapper;
+import com.example.question_Service.Model.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,5 +61,38 @@ public class QuestionService {
     }
 
 
+    public ResponseEntity<List<QuestionWrapper>> getQuestionsFromId(List<Integer> questionIds) {
+        List<QuestionWrapper> wrapper = new ArrayList<>();
+        List<Question> questions = new ArrayList<>();
 
+        for(int id : questionIds){
+            questions.add(questionDao.findById(id).get());
+        }
+
+        for(Question question : questions){
+            QuestionWrapper wrapper1 = new QuestionWrapper();
+            wrapper1.setId(question.getId());
+            wrapper1.setQuestionTitle(question.getQuestionTitle());
+            wrapper1.setOption1(question.getOption1());
+            wrapper1.setOption2(question.getOption2());
+            wrapper1.setOption3(question.getOption3());
+            wrapper1.setOption4(question.getOption4());
+            wrapper.add(wrapper1);
+        }
+
+        return new ResponseEntity<>(wrapper , HttpStatus.OK);
+    }
+
+    public ResponseEntity<Integer> getScore(List<Response> responses) {
+
+        int right = 0;
+
+        for(Response response : responses){
+            Question question = questionDao.findById(response.getId()).get();
+            if(response.getResponse().equals(question.getRightAnswer())){
+                right++;
+            }
+        }
+        return new ResponseEntity<>(right , HttpStatus.OK);
+    }
 }

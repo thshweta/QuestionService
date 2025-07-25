@@ -2,10 +2,12 @@ package com.example.question_Service.Model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class QuestionWrapper {
+@NoArgsConstructor
+public class  QuestionWrapper {
 
     private int id;
     private String questionTitle;
