@@ -6,6 +6,7 @@ import com.example.question_Service.Model.QuestionWrapper;
 import com.example.question_Service.Model.Response;
 import com.example.question_Service.Service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -16,6 +17,9 @@ public class QuestionController {
 
     @Autowired
     QuestionService questionService;
+
+    @Autowired
+    Environment environment;
 
 
     @GetMapping("/allQuestions")
@@ -38,10 +42,6 @@ public class QuestionController {
     public String deleteById(@PathVariable int id){return questionService.deleteById(id);}
 
 
-    //generate or create
-    // getQuestion(by QuestionId)
-    // getScore
-
     @GetMapping("create")
     public ResponseEntity<List<Integer>> getQuestionsForQuiz(@RequestParam String category,@RequestParam int numQ){
         return questionService.getQuestionsForQuiz(category , numQ);
@@ -50,7 +50,8 @@ public class QuestionController {
 
     @PostMapping("getQuestions")
     public ResponseEntity<List<QuestionWrapper>> getQuestionsFromId(@RequestBody List<Integer> questionIds){
-      return questionService.getQuestionsFromId(questionIds);
+        System.out.println(environment.getProperty("local.server.port"));
+        return questionService.getQuestionsFromId(questionIds);
     }
 
 
